@@ -12,20 +12,20 @@ import java.util.prefs.BackingStoreException;
 public class DisplaySettings {
 
     private final SimpleApplication app;
-    private AppSettings appSettings;
+    private AppSettings appSettings = null;
     private String renderer = "AppSettings.LWJGL_OPENGL2";
     private int colorDepth = 32;
     private int frames = 60;
     private boolean fullScreen = false;
-    private int height = 600;
-    private int width = 800;
+    private int height = 768;
+    private int width = 1024;
     private int samples = 4;
-    private boolean vSync = true;
+    private boolean vSync = false;
     private int frequency = 60;
     private int stencilBits = 8;
     private int depthBits = 16;
 
-    private final String pathToSettings = "settings";
+    private final String pathToSettings = "pl.theboxingnights.settings";
 
     public DisplaySettings(Application app) {
         this.app = (SimpleApplication) app;
@@ -139,15 +139,15 @@ public class DisplaySettings {
     }
 
     public void getSettings() {
-        appSettings.getRenderer();
-        appSettings.getBitsPerPixel();
-        appSettings.getFrameRate();
-        appSettings.getHeight();
-        appSettings.getWidth();
-        appSettings.getSamples();
-        appSettings.getFrequency();
-        appSettings.getStencilBits();
-        appSettings.getDepthBits();
+        renderer = appSettings.getRenderer();
+        colorDepth = appSettings.getBitsPerPixel();
+        frames = appSettings.getFrameRate();
+        height = appSettings.getHeight();
+        width = appSettings.getWidth();
+        samples = appSettings.getSamples();
+        frequency = appSettings.getFrequency();
+        stencilBits = appSettings.getStencilBits();
+        depthBits = appSettings.getDepthBits();
     }
 
     public void setSettings() {
@@ -162,6 +162,7 @@ public class DisplaySettings {
         appSettings.setFrequency(frequency);
         appSettings.setStencilBits(stencilBits);
         appSettings.setDepthBits(depthBits);
+        app.setSettings(appSettings);
     }
 
     public void save() throws BackingStoreException {
