@@ -26,8 +26,6 @@ public class DisplaySettings {
     private int stencilBits = 8;
     private int depthBits = 16;
 
-    private final String pathToSettings = "pl.theboxingnights.displaySettings";
-
     public DisplaySettings(Application app) {
         this.app = (SimpleApplication) app;
         if (isAppSettingsNull()) {
@@ -177,8 +175,7 @@ public class DisplaySettings {
     }
 
     public String getTitle() {
-        String title = "The Boxing Nights";
-        return title;
+        return "The Boxing Nights";
     }
 
     public void setAppSettings(AppSettings appSettings) {
@@ -186,6 +183,6 @@ public class DisplaySettings {
     }
 
     public String getPathToSettings() {
-        return pathToSettings;
+        return "pl.theboxingnights.displaySettings";
     }
 }
