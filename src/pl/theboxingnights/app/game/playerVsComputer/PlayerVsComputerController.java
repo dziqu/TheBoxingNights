@@ -4,35 +4,48 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
-import com.jme3.input.FlyByCamera;
-import com.jme3.input.InputManager;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.CameraNode;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import pl.theboxingnights.app.helpers.AppStates;
 
 /**
  * Created by filip / 05.06.15 / 05:42
  */
 public class PlayerVsComputerController extends AbstractAppState {
 
-    private SimpleApplication application;
-    private Node scene;
+    private AppStates appStates;
 
     @Override
     public void initialize(AppStateManager appStateManager, Application application) {
         super.initialize(appStateManager, application);
-        this.setApplication((SimpleApplication) application);
-        getFlyByCamera().setMoveSpeed(50f);
+        setAppStates(new AppStates((SimpleApplication)application));
+        getAppStates().getFlyByCamera().setMoveSpeed(50f);
 
-        getAsstetManager().registerLoader(BlenderModelLoader.class, getBlendExtension());
-        loadModel(getRingPath());
+        getAppStates().getAsstetManager().registerLoader(BlenderModelLoader.class, getBlendExtension());
+        loadModel(getRingPath(), "ring");
+        loadModel(getPlayerPath(), "player1", 0.3f);
     }
 
-    public void loadModel(String source) {
-        setScene((Node) getAsstetManager().loadModel(source));
-        getRootNode().attachChild(getScene());
+    public void loadModel(String source, String name) {
+        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
+        node.setName(name);
+        getAppStates().getRootNode().attachChild(node);
+    }
+
+    public void loadModel(String source, String name, float localScale) {
+        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
+        node.setName(name);
+        node.setLocalScale(localScale);
+        getAppStates().getRootNode().attachChild(node);
+    }
+
+    public void loadModel(String source, String name, float localScale, Vector3f localTranslation) {
+        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
+        node.setName(name);
+        node.setLocalScale(localScale);
+        node.setLocalTranslation(localTranslation);
+        getAppStates().getRootNode().attachChild(node);
     }
 
     private String getBlendExtension() {
@@ -43,43 +56,15 @@ public class PlayerVsComputerController extends AbstractAppState {
         return "pl/theboxingnights/app/assets/models/ring/ring.blend";
     }
 
-    public SimpleApplication getApplication() {
-        return application;
+    private String getPlayerPath() {
+        return "pl/theboxingnights/app/assets/models/player/player.blend";
     }
 
-    public void setApplication(SimpleApplication application) {
-        this.application = application;
+    public AppStates getAppStates() {
+        return appStates;
     }
 
-    public Node getRootNode() {
-        return getApplication().getRootNode();
-    }
-
-    public AppStateManager getStateManager() {
-        return getApplication().getStateManager();
-    }
-
-    public InputManager getInputManager() {
-        return getApplication().getInputManager();
-    }
-
-    public AssetManager getAsstetManager() {
-        return getApplication().getAssetManager();
-    }
-
-    private Camera getCamera() {
-        return getApplication().getCamera();
-    }
-
-    private FlyByCamera getFlyByCamera() {
-        return getApplication().getFlyByCamera();
-    }
-
-    public Node getScene() {
-        return scene;
-    }
-
-    public void setScene(Node scene) {
-        this.scene = scene;
+    public void setAppStates(AppStates appStates) {
+        this.appStates = appStates;
     }
 }
