@@ -13,7 +13,7 @@ public class DisplaySettings {
 
     private final SimpleApplication app;
     private AppSettings appSettings = null;
-    private String renderer = "AppSettings.LWJGL_OPENGL2";
+    private String renderer = AppSettings.LWJGL_OPENGL2;
     private int colorDepth = 32;
     private int frames = 60;
     private boolean fullScreen = false;
@@ -25,7 +25,8 @@ public class DisplaySettings {
     private int stencilBits = 8;
     private int depthBits = 16;
 
-    private final String pathToSettings = "pl.theboxingnights.settings";
+    private final String pathToSettings = "pl.theboxingnights.displaySettings";
+    private final String title = "The Boxing Nights";
 
     public DisplaySettings(Application app) {
         this.app = (SimpleApplication) app;
@@ -162,6 +163,7 @@ public class DisplaySettings {
         appSettings.setFrequency(frequency);
         appSettings.setStencilBits(stencilBits);
         appSettings.setDepthBits(depthBits);
+        appSettings.setTitle("The Boxing Nights");
         app.setSettings(appSettings);
     }
 
