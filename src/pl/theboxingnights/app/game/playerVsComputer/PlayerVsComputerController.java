@@ -4,6 +4,8 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
@@ -21,31 +23,36 @@ public class PlayerVsComputerController extends AbstractAppState {
         super.initialize(appStateManager, application);
         setAppStates(new AppStates((SimpleApplication)application));
         getAppStates().getFlyByCamera().setMoveSpeed(50f);
-
+        getAppStates().getStateManager().attach(getAppStates().getBulletAppState());
         getAppStates().getAsstetManager().registerLoader(BlenderModelLoader.class, getBlendExtension());
-        loadModel(getRingPath(), "ring");
-        loadModel(getPlayerPath(), "player1", 0.3f);
+
+        loadScene(getRingPath(), getSceneName());
+        loadPlayer(getPlayerPath(), "player1", 0.03f, new Vector3f(0, 1, 0));
+        loadPlayer(getPlayerPath(), "player2", 0.03f, new Vector3f(0, 1, 0));
     }
 
-    public void loadModel(String source, String name) {
-        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
-        node.setName(name);
-        getAppStates().getRootNode().attachChild(node);
+    public void loadScene(String locationInProject, String name) {
+        Node sceneNode = (Node) getAppStates().getAsstetManager().loadModel(locationInProject);
+        sceneNode.setName(name);
+        sceneNode.addControl(new RigidBodyControl(0f));
+        getAppStates().getBulletAppState().getPhysicsSpace().add(sceneNode);
+        getAppStates().getRootNode().attachChild(sceneNode);
     }
 
-    public void loadModel(String source, String name, float localScale) {
-        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
-        node.setName(name);
-        node.setLocalScale(localScale);
-        getAppStates().getRootNode().attachChild(node);
+    public void loadPlayer(String locationInProject, String name, float scale, Vector3f locationInScene) {
+        Node playerNode = (Node) getAppStates().getAsstetManager().loadModel(locationInProject);
+        playerNode.setName(name);
+        playerNode.setLocalScale(scale);
+        playerNode.setLocalTranslation(locationInScene);
+        BetterCharacterControl playerControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
+        playerControl.setGravity(new Vector3f(0, -10, 0));
+        playerNode.addControl(playerControl);
+        getAppStates().getBulletAppState().getPhysicsSpace().add(playerNode);
+        getAppStates().getRootNode().attachChild(playerNode);
     }
 
-    public void loadModel(String source, String name, float localScale, Vector3f localTranslation) {
-        Node node = (Node) getAppStates().getAsstetManager().loadModel(source);
-        node.setName(name);
-        node.setLocalScale(localScale);
-        node.setLocalTranslation(localTranslation);
-        getAppStates().getRootNode().attachChild(node);
+    private String getSceneName() {
+        return "ring";
     }
 
     private String getBlendExtension() {
