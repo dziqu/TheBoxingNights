@@ -31,13 +31,13 @@ public class DisplaySettings {
     public DisplaySettings(Application app) {
         this.app = (SimpleApplication) app;
         if (isAppSettingsNull()) {
-            appSettings = new AppSettings(true);
+            setAppSettings(new AppSettings(true));
         }
     }
 
     private boolean isAppSettingsNull() {
         boolean isAppSettingsNull = true;
-        if (!(appSettings == null)) {
+        if (!(getAppSettings() == null)) {
             isAppSettingsNull = false;
         }
         return isAppSettingsNull;
@@ -140,43 +140,52 @@ public class DisplaySettings {
     }
 
     public void getSettings() {
-        renderer = appSettings.getRenderer();
-        colorDepth = appSettings.getBitsPerPixel();
-        frames = appSettings.getFrameRate();
-        height = appSettings.getHeight();
-        width = appSettings.getWidth();
-        samples = appSettings.getSamples();
-        frequency = appSettings.getFrequency();
-        stencilBits = appSettings.getStencilBits();
-        depthBits = appSettings.getDepthBits();
+        setRenderer(getAppSettings().getRenderer());
+        setColorDepth(getAppSettings().getBitsPerPixel());
+        setFrames(getAppSettings().getFrameRate());
+        setFullScreen(getAppSettings().isFullscreen());
+        setHeight(getAppSettings().getHeight());
+        setWidth(getAppSettings().getWidth());
+        setSamples(getAppSettings().getSamples());
+        setFrequency(getAppSettings().getFrequency());
+        setStencilBits(getAppSettings().getStencilBits());
+        setDepthBits(getAppSettings().getDepthBits());
     }
 
     public void setSettings() {
-        appSettings.setRenderer(renderer);
-        appSettings.setBitsPerPixel(colorDepth);
-        appSettings.setFrameRate(frames);
-        appSettings.setFullscreen(fullScreen);
-        appSettings.setHeight(height);
-        appSettings.setWidth(width);
-        appSettings.setSamples(samples);
-        appSettings.setVSync(vSync);
-        appSettings.setFrequency(frequency);
-        appSettings.setStencilBits(stencilBits);
-        appSettings.setDepthBits(depthBits);
-        appSettings.setTitle("The Boxing Nights");
-        app.setSettings(appSettings);
+        getAppSettings().setRenderer(getRenderer());
+        getAppSettings().setBitsPerPixel(getColorDepth());
+        getAppSettings().setFrameRate(getFrames());
+        getAppSettings().setFullscreen(isFullScreen());
+        getAppSettings().setHeight(getHeight());
+        getAppSettings().setWidth(getWidth());
+        getAppSettings().setSamples(getSamples());
+        getAppSettings().setVSync(isvSync());
+        getAppSettings().setFrequency(getFrequency());
+        getAppSettings().setStencilBits(getStencilBits());
+        getAppSettings().setDepthBits(getDepthBits());
+        getAppSettings().setTitle("The Boxing Nights");
+        getApp().setSettings(getAppSettings());
     }
 
     public void save() throws BackingStoreException {
-        appSettings.save(pathToSettings);
+        getAppSettings().save(getPathToSettings());
     }
 
     public void load() throws BackingStoreException {
-        appSettings.load(pathToSettings);
+        getAppSettings().load(getPathToSettings());
     }
 
     public String getTitle() {
         String title = "The Boxing Nights";
         return title;
+    }
+
+    public void setAppSettings(AppSettings appSettings) {
+        this.appSettings = appSettings;
+    }
+
+    public String getPathToSettings() {
+        return pathToSettings;
     }
 }
