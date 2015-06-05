@@ -7,8 +7,9 @@ import com.jme3.system.AppSettings;
 import java.util.prefs.BackingStoreException;
 
 /**
- * Created by filip on 05.06.15.
+ * Created by filip / 05.06.15 / 04:59
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class DisplaySettings {
 
     private final SimpleApplication app;
@@ -26,7 +27,6 @@ public class DisplaySettings {
     private int depthBits = 16;
 
     private final String pathToSettings = "pl.theboxingnights.displaySettings";
-    private final String title = "The Boxing Nights";
 
     public DisplaySettings(Application app) {
         this.app = (SimpleApplication) app;
@@ -173,5 +173,10 @@ public class DisplaySettings {
 
     public void load() throws BackingStoreException {
         appSettings.load(pathToSettings);
+    }
+
+    public String getTitle() {
+        String title = "The Boxing Nights";
+        return title;
     }
 }
